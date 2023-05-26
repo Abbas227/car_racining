@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+}
+#game{
+    height: 500px;
+    width: 390px;
+    border: 1px solid black;
+    margin: 1rem auto;
+    background: url(img/bg.jpg) ;
+    background-size: contain;
+    overflow: hidden;
+}
+#bluecar{
+    height: 100px;
+    width: 130px;
+    position: relative;
+    text-align: center;
+    top: 0px;
+    left: 40px;
+    animation: move 2s linear infinite;
+}
+#bluecar img{
+    height: 100px;
+}
+@keyframes move{
+    0%{
+        top: 0px;
+    }
+    100%{
+        top: 501px;
+    }
+}
+#racecar{
+    height: 100px;
+    width: 130px;
+    position: relative;
+    top: 250px;
+    left: 130px;
+    text-align: center;
+}
+#racecar img{
+    height: 100px;
+}
+#result{
+    height: 200px;
+    width: 400px;
+    background-color: cornflowerblue;
+    margin: 1rem auto;    
+    margin-top: 12%;
+    border-radius: 20px;
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    display: none;
+}
+#result:hover{
+    height: 200px;
+    width: 400px;
+    background-color: cornflowerblue;
+    margin: 1rem auto;    
+    margin-top: 12%;
+    border-radius: 20px;
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    display: none;
+    box-shadow: 2px 3px 2px black;
+}
+#score{
+    font-size: 2.2rem;
+    color: brown;
+}
+#btn{
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(106, 255, 37);
+    color: rgb(138, 32, 32);
+    font-size: 25px;
+    width: 200px;
+    margin: 22px 82px ;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+#btn:hover{
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(255, 0, 0);
+    color: rgb(0, 26, 255);
+    font-size: 25px;
+    width: 200px;
+    margin: 22px 82px ;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+    </style>
+</head>
+<body>
+    <div id="game">
+        <div id="bluecar"><img src="img/blue.jpg" alt=""></div>
+        <div id="racecar"><img src="img/race.jpg" alt=""></div>
+    </div>
+    <div id="result">
+        <h1>Game Over</h1>
+        <div id="score"></div>
+        <div id="btn" onclick="location.reload()">Restart</div>
+    </div>
+    <audio src="jumpsound.mp3" id="jumpsound"></audio>
+</body>
+
+<!-- <script src="script.js"></script> -->
+<script>
+    var bluecar = document.getElementById("bluecar");
+var racecar = document.getElementById("racecar");
+var result = document.getElementById("result");
+const score = document.getElementById("score");
+var game = document.getElementById("game");
+var counter = 0;
+var jumpsound= document.getElementById("jumpsound");
+
+//bluecar move
+    bluecar.addEventListener("animationiteration", function(){
+        var random = ((Math.floor(Math.random()*3))* 90)
+        bluecar.style.left = (random+40 )+ "px"
+        counter++;
+        console.log(random)
+    })
+
+
+//racecar move
+window.addEventListener("keydown",function(e){
+    if(e.keyCode == "39"){
+        var raceCarLeft = parseInt(window.getComputedStyle(racecar).getPropertyValue("left"))
+        if(raceCarLeft < 180){
+            racecar.style.left = (raceCarLeft + 90) + "px"
+        }
+        jumpsound.play();
+    };
+    if(e.keyCode == "37"){
+        var raceCarLeft = parseInt(window.getComputedStyle(racecar).getPropertyValue("left"))
+        if(raceCarLeft > 40){
+            racecar.style.left = (raceCarLeft - 90) + "px"
+        }
+        jumpsound.play();
+
+    };
+})
+
+//game  over
+setInterval( function Gameover(){
+    var blueCarTop = parseInt(window.getComputedStyle(bluecar).getPropertyValue("top"));
+    var blueCarLeft = parseInt(window.getComputedStyle(bluecar).getPropertyValue("left"));
+    var raceCarLeft = parseInt(window.getComputedStyle(racecar).getPropertyValue("left"));
+
+    if((blueCarLeft === raceCarLeft) && (blueCarTop > 250) && (blueCarTop < 450)){
+        result.style.display = "block";
+        game.style.display = "none";
+        score.innerHTML = `score : ${counter}`;
+
+        counter = 0;
+    }
+},10)
+
+
+
+
+</script>
+</html>
